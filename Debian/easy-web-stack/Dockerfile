@@ -21,17 +21,10 @@ RUN apt-get update \
        nginx \
        php5-cli \
        php5-common \
-       php5-sqlite \
        php5-cgi \
-       php5-mysqlnd \
        php5-mysqli \
-       php5-mongo\
-       php5-pgsql\
        php5-curl\
-       php5-gd \
-       php5-memcached \
        php5-mcrypt \
-       php5-imagick \
        php5-fpm \
     && apt-get clean ; \ 
     
@@ -42,6 +35,11 @@ RUN apt-get update \
     && rm /etc/nginx/sites-enabled/default
 
 COPY default.conf /etc/nginx/sites-available/default
+COPY entrypoint.sh /
 
-RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default \
+    && chmod 0777 /entrypoint.sh
 
+ENTRYPOINT ["/entrypoint.sh"]
+
+EXPOSE 80
